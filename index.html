@@ -3,589 +3,584 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plataforma de Conocimiento: Advantage Consulting</title>
+    <title>Manual Técnico Integral: Vidrio y DVH</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Oswald:wght@300;500;700&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: #f1f5f9;
-            color: #334155;
+            background-color: #f8fafc;
+            color: #334155; /* Slate-700 for better readability */
             line-height: 1.6;
         }
-        h1, h2, h3, h4 { font-family: 'Oswald', sans-serif; text-transform: uppercase; }
+        h1, h2, h3, h4 {
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+        }
+        .chapter-number {
+            font-family: 'Oswald', sans-serif;
+        }
+        p { margin-bottom: 1rem; }
         
-        /* --- ESTILOS DE NAVEGACIÓN SUPERIOR --- */
-        .nav-pill {
-            transition: all 0.3s ease;
-            opacity: 0.7;
-            border-bottom: 3px solid transparent;
-        }
-        .nav-pill.active {
-            opacity: 1;
-            background-color: rgba(255,255,255,0.1);
-            border-bottom-color: #22d3ee; /* cyan-400 */
-        }
-
-        /* --- ESTILOS DE PESTAÑAS INTERNAS (TABS) --- */
-        .tab-btn {
-            background-color: #e2e8f0;
-            color: #64748b;
-            transition: all 0.2s;
-        }
+        /* Estilos de Pestañas */
         .tab-btn.active {
             background-color: #0891b2; /* cyan-600 */
             color: white;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border-bottom: 4px solid #164e63; /* cyan-900 */
         }
-        
-        /* --- ANIMACIONES --- */
-        .section-container { display: none; animation: fadeIn 0.4s ease-in-out; }
-        .section-container.active { display: block; }
-        
-        .tab-content { display: none; animation: slideUp 0.3s ease-out; }
-        .tab-content.active { display: block; }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* --- ESTILOS ESPECÍFICOS --- */
-        .concept-card {
-            background: white; border-radius: 8px; padding: 1.5rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            border-left: 4px solid #0891b2;
-            transition: transform 0.2s;
-            margin-bottom: 2rem;
+        .tab-btn {
+            color: #475569;
+            background-color: #e2e8f0;
         }
-        .concept-card:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
-        
-        .tech-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
-        .tech-table th { background-color: #334155; color: white; padding: 12px; text-align: left; font-weight: 500; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.05em; }
-        .tech-table td { padding: 10px 12px; border-bottom: 1px solid #e2e8f0; color: #475569; }
-        .tech-table tr:last-child td { border-bottom: none; }
-        .tech-table tr:nth-child(even) { background-color: #f8fafc; }
-        .tech-table tr:hover { background-color: #f1f5f9; }
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-        .info-box { background-color: #f0f9ff; border: 1px solid #bae6fd; padding: 1rem; border-radius: 0.5rem; font-size: 0.9rem; margin-top: 1rem; }
-        .info-box strong { color: #0284c7; }
-
-        /* --- IMPRESIÓN --- */
+        /* LOGICA DE IMPRESIÓN AVANZADA */
         @media print {
-            body { background: white; color: black; font-size: 10pt; }
-            nav, .no-print, .tab-nav-wrapper { display: none !important; }
-            .section-container { display: none !important; }
-            .section-container.active { display: block !important; }
-            .print-current .tab-content.active { display: block !important; }
-            .print-current .tab-content:not(.active) { display: none !important; }
-            .print-all .tab-content { display: block !important; page-break-after: always; }
+            body { background-color: white; color: black; font-size: 10pt; line-height: 1.4; }
+            nav, .tab-nav, footer, .no-print, .brand-selector { display: none !important; }
+            
+            /* Si body tiene clase 'print-all', mostramos todo */
+            body.print-all .tab-content { display: block !important; }
+            body.print-all .tab-content:not(:last-child) { page-break-after: always; }
+
+            /* Si body tiene clase 'print-current', solo mostramos el activo */
+            body.print-current .tab-content.active { display: block !important; }
+            body.print-current .tab-content:not(.active) { display: none !important; }
+
             .page-break { page-break-before: always; }
             .print-avoid-break { break-inside: avoid; }
             a { text-decoration: none; color: black; }
             img { max-height: 150px; object-fit: contain; }
-            svg { max-width: 100%; height: auto; break-inside: avoid; }
-            .print-header { display: block !important; border-bottom: 2px solid #000; margin-bottom: 20px; font-weight: bold; font-size: 16pt; margin-top: 20px; }
+            svg { max-width: 100%; height: auto; }
+            .section-print-title { display: block !important; margin-top: 20px; border-bottom: 2px solid black; margin-bottom: 20px; font-size: 16pt;}
         }
-        .print-header { display: none; }
+        .section-print-title { display: none; }
     </style>
 </head>
-<body class="flex flex-col min-h-screen">
+<body class="flex flex-col min-h-screen transition-colors duration-300">
 
-    <!-- BARRA DE NAVEGACIÓN -->
-    <nav class="bg-slate-900 text-white shadow-xl sticky top-0 z-50 no-print">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="flex flex-col md:flex-row justify-between items-center h-auto md:h-16 py-2 md:py-0 gap-4">
-                <div class="flex items-center space-x-3">
-                    <div class="bg-cyan-600 p-1.5 rounded text-white"><i class="fas fa-layer-group text-xl"></i></div>
-                    <div class="leading-tight">
-                        <span class="block font-bold tracking-wider text-lg">PLATAFORMA</span>
-                        <span class="text-xs text-cyan-400 uppercase tracking-widest font-bold">Conocimiento Técnico</span>
-                    </div>
+    <!-- Header Navigation (Top Bar) -->
+    <nav class="bg-slate-900 text-white shadow-lg sticky top-0 z-50 no-print">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-4">
+            
+            <!-- Logo y Título -->
+            <div class="flex items-center space-x-3">
+                <i class="fas fa-layer-group text-2xl text-cyan-400"></i>
+                <span class="font-bold text-lg tracking-wider">MANUAL INTEGRAL</span>
+            </div>
+
+            <!-- Controles (Marca e Impresión) -->
+            <div class="flex flex-wrap items-center justify-center gap-3">
+                
+                <!-- Selector de Marca -->
+                <div class="flex items-center bg-slate-800 rounded px-3 py-1 border border-slate-700">
+                    <i class="fas fa-building text-gray-400 mr-2 text-xs"></i>
+                    <select id="brandSelect" onchange="changeBrand()" class="bg-transparent text-sm font-bold text-white focus:outline-none cursor-pointer">
+                        <option value="advantage">Advantage Consulting</option>
+                        <option value="herramaq">Herramaq</option>
+                    </select>
                 </div>
-                <div class="flex bg-slate-800 rounded-lg p-1">
-                    <button onclick="switchSection('manuals')" id="nav-manuals" class="nav-pill active px-6 py-1.5 rounded-md font-bold text-sm flex items-center gap-2"><i class="fas fa-book"></i> Manuales Técnicos</button>
-                    <button onclick="switchSection('academy')" id="nav-academy" class="nav-pill px-6 py-1.5 rounded-md font-bold text-sm flex items-center gap-2"><i class="fas fa-graduation-cap"></i> Academia</button>
-                </div>
-                <div class="flex items-center gap-3">
-                    <div class="flex items-center bg-slate-800 rounded px-3 py-1 border border-slate-700">
-                        <i class="fas fa-building text-gray-400 mr-2 text-xs"></i>
-                        <select id="brandSelect" onchange="changeBrand()" class="bg-transparent text-sm font-bold text-white focus:outline-none cursor-pointer">
-                            <option value="advantage">Advantage</option>
-                            <option value="herramaq">Herramaq</option>
-                        </select>
-                    </div>
-                    <button onclick="printCurrentContext('current')" class="bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded text-xs font-bold border border-slate-600 transition"><i class="fas fa-print"></i></button>
-                    <button onclick="printCurrentContext('all')" class="bg-cyan-600 hover:bg-cyan-500 px-3 py-1.5 rounded text-xs font-bold border border-cyan-500 shadow transition flex items-center gap-1"><i class="fas fa-file-pdf"></i> Todo</button>
-                </div>
+
+                <div class="h-6 w-px bg-slate-700 mx-2 hidden md:block"></div>
+
+                <!-- Botones de Impresión -->
+                <button onclick="printManual('current')" class="bg-slate-700 hover:bg-slate-600 text-white px-3 py-2 rounded text-xs font-bold transition flex items-center border border-slate-600">
+                    <i class="fas fa-print mr-2"></i> Imprimir Actual
+                </button>
+                <button onclick="printManual('all')" class="bg-cyan-600 hover:bg-cyan-500 text-white px-3 py-2 rounded text-xs font-bold transition flex items-center shadow border border-cyan-500">
+                    <i class="fas fa-copy mr-2"></i> Imprimir Todo
+                </button>
             </div>
         </div>
     </nav>
 
-    <main class="flex-grow container mx-auto px-4 py-8 max-w-6xl">
+    <main class="flex-grow container mx-auto px-6 py-8 max-w-5xl bg-white my-8 shadow-2xl min-h-screen rounded-lg overflow-hidden relative">
 
-        <!-- ================================================================================== -->
-        <!-- SECCIÓN 1: MANUALES TÉCNICOS -->
-        <!-- ================================================================================== -->
-        <div id="section-manuals" class="section-container active">
-            
-            <header class="text-center pb-8 border-b-4 border-cyan-600 mb-8">
-                <div class="w-full mb-6 relative bg-slate-100 h-64 overflow-hidden rounded-lg shadow-md">
-                    <img id="logo-manuals" src="IMG_4612.JPG" alt="Banner Institucional" class="w-full h-full object-cover object-center">
-                </div>
-                <h1 class="text-4xl md:text-5xl font-bold text-slate-900 mb-2">MANUAL TÉCNICO <span class="text-cyan-600">DEL VIDRIO</span></h1>
-                <h2 class="text-xl text-slate-500 font-light">Normativas Legales, DVH y Float</h2>
-                <div class="mt-4 flex justify-center items-center space-x-2 text-sm text-slate-500 font-bold tracking-wide uppercase">
-                    <span id="brandOwnerManuals"><i class="fas fa-copyright mr-1"></i> Propiedad de Advantage Consulting</span>
-                </div>
-            </header>
-
-            <div class="flex justify-center space-x-2 mb-8 tab-nav-wrapper no-print">
-                <button onclick="switchTab('manuals', 'dvh')" id="btn-dvh" class="tab-btn active px-8 py-3 rounded-t-lg font-bold text-lg flex-1 md:flex-none text-center"><i class="fas fa-box-open mr-2"></i> Manual DVH</button>
-                <button onclick="switchTab('manuals', 'float')" id="btn-float" class="tab-btn px-8 py-3 rounded-t-lg font-bold text-lg flex-1 md:flex-none text-center"><i class="fas fa-industry mr-2"></i> Proceso Float</button>
+        <!-- Portada Dinámica -->
+        <section class="text-center pb-8 border-b-4 border-cyan-600 mb-8 transition-all" id="coverSection">
+            <div class="w-full mb-8 relative bg-slate-50 flex items-center justify-center overflow-hidden" style="height: 280px;">
+                <!-- Imagen Dinámica -->
+                <img id="brandLogo" src="IMG_4612.JPG" alt="Banner Institucional" class="w-full h-full object-cover object-center shadow-md">
             </div>
-
-            <!-- CONTENIDO DVH -->
-            <div id="tab-dvh" class="tab-content active px-2 md:px-8">
-                <h2 class="print-header">MANUAL TÉCNICO: DVH</h2>
+            <div class="px-4">
+                <h1 class="text-4xl md:text-6xl font-bold text-slate-900 mb-2 leading-none">MANUAL TÉCNICO<br><span class="text-cyan-600">DEL VIDRIO</span></h1>
+                <h2 class="text-xl md:text-2xl text-slate-600 font-light mb-4">Fabricación Float y Tecnología DVH</h2>
                 
-                <!-- Definición -->
-                <article class="mb-12">
-                    <div class="flex items-center mb-6">
-                        <div class="bg-cyan-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold text-xl mr-3 shadow-md">1</div>
-                        <h3 class="text-3xl font-bold text-slate-800 border-b-2 border-slate-200 w-full pb-2">Definición y Propósito</h3>
-                    </div>
-                    <p class="text-lg text-gray-700 mb-4">El DVH es un componente prefabricado conformado por dos o más vidrios separados por una cámara de aire estanca, diseñado para romper el puente térmico.</p>
+                <div class="flex justify-center items-center space-x-2 text-sm text-slate-500 font-bold tracking-wide uppercase bg-slate-50 py-2 rounded-full inline-block px-6 border border-slate-200">
+                    <i class="fas fa-copyright text-cyan-600"></i>
+                    <span id="brandOwner">Propiedad de Advantage Consulting</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- NAVEGACIÓN DE PESTAÑAS (TABS) -->
+        <div class="flex justify-center space-x-2 mb-10 tab-nav no-print px-4 border-b border-gray-200">
+            <button onclick="switchTab('dvh')" id="btn-dvh" class="tab-btn active px-8 py-4 rounded-t-lg font-bold text-lg transition-all shadow-sm flex items-center justify-center hover:bg-slate-100">
+                <i class="fas fa-box-open mr-2"></i> Manual DVH
+            </button>
+            <button onclick="switchTab('float')" id="btn-float" class="tab-btn px-8 py-4 rounded-t-lg font-bold text-lg transition-all shadow-sm flex items-center justify-center hover:bg-slate-100">
+                <i class="fas fa-industry mr-2"></i> Proceso Float
+            </button>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- PESTAÑA 1: MANUAL DVH (CONTENIDO COMPLETO) -->
+        <!-- ========================================== -->
+        <div id="tab-dvh" class="tab-content active px-4 md:px-8">
+            
+            <h2 class="section-print-title text-2xl font-bold">SECCIÓN 1: MANUAL DVH</h2>
+
+            <!-- Introducción -->
+            <article class="mb-12">
+                <div class="flex items-center mb-6">
+                    <div class="bg-cyan-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold text-xl mr-3 shadow-md">1</div>
+                    <h2 class="text-3xl font-bold text-slate-800 border-b-2 border-slate-200 w-full pb-2">Definición y Propósito</h2>
+                </div>
+                
+                <div class="prose max-w-none text-gray-700">
+                    <p class="text-lg leading-relaxed mb-4">
+                        El <strong>Doble Vidriado Hermético (DVH)</strong> es mucho más que dos vidrios pegados. Es un componente prefabricado conformado por dos o más vidrios separados entre sí por una cámara de aire (o gas argón), herméticamente sellada.
+                    </p>
+                    <p class="mb-6">
+                        Su función principal es romper el puente térmico, actuando como una barrera eficiente entre el clima exterior hostil y el confort interior.
+                    </p>
+                    
                     <div class="grid md:grid-cols-3 gap-6 mt-6">
                         <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
                             <h4 class="font-bold text-blue-800 mb-2"><i class="fas fa-snowflake mr-2"></i>Ahorro Energético</h4>
-                            <p class="text-sm">Reduce pérdidas de calefacción y aire acondicionado hasta un 50%.</p>
+                            <p class="text-sm">Reduce drásticamente las pérdidas de calefacción en invierno y las ganancias de calor en verano.</p>
                         </div>
                         <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
                             <h4 class="font-bold text-blue-800 mb-2"><i class="fas fa-home mr-2"></i>Confort</h4>
-                            <p class="text-sm">Elimina la zona fría junto a la ventana, permitiendo usar todo el ambiente.</p>
+                            <p class="text-sm">Elimina el efecto de "muro frío" cerca de la ventana, permitiendo aprovechar el 100% de la superficie habitable.</p>
                         </div>
                         <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
                             <h4 class="font-bold text-blue-800 mb-2"><i class="fas fa-heartbeat mr-2"></i>Salud</h4>
-                            <p class="text-sm">Evita la condensación superficial, previniendo hongos y problemas respiratorios.</p>
+                            <p class="text-sm">Minimiza la condensación sobre el vidrio, evitando la formación de hongos y moho perjudiciales.</p>
                         </div>
                     </div>
-                </article>
+                </div>
+            </article>
 
-                <!-- Anatomía -->
-                <article class="mb-16 print-avoid-break">
-                    <div class="flex items-center mb-6">
-                        <div class="bg-cyan-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold text-xl mr-3 shadow-md">2</div>
-                        <h3 class="text-3xl font-bold text-slate-800 border-b-2 border-slate-200 w-full pb-2">Anatomía del DVH</h3>
-                    </div>
-                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-8 mb-8 shadow-inner overflow-hidden">
-                        <div class="flex flex-col md:flex-row gap-8 items-center justify-center">
-                            <div class="flex-shrink-0 max-w-full overflow-x-auto">
-                                <svg width="450" height="250" viewBox="0 0 380 220" class="max-w-full h-auto">
-                                    <rect x="150" y="20" width="80" height="150" fill="#e2e8f0" stroke="#64748b" />
-                                    <circle cx="160" cy="30" r="2" fill="#94a3b8" /><circle cx="170" cy="35" r="2" fill="#94a3b8" /><circle cx="180" cy="25" r="2" fill="#94a3b8" /><circle cx="190" cy="30" r="2" fill="#94a3b8" />
-                                    <rect x="130" y="10" width="20" height="170" fill="#bfdbfe" stroke="#3b82f6" opacity="0.8" />
-                                    <rect x="230" y="10" width="20" height="170" fill="#bfdbfe" stroke="#3b82f6" opacity="0.8" />
-                                    <rect x="150" y="20" width="3" height="150" fill="#000" />
-                                    <rect x="227" y="20" width="3" height="150" fill="#000" />
-                                    <path d="M150,170 L230,170 L230,190 L150,190 Z" fill="#334155" />
-                                    <text x="125" y="100" font-size="10" fill="#0e7490" text-anchor="end">Vidrio Ext.</text>
-                                    <text x="255" y="100" font-size="10" fill="#0e7490">Vidrio Int.</text>
-                                    <line x1="190" y1="35" x2="270" y2="35" stroke="#64748b" stroke-width="1" />
-                                    <text x="275" y="38" font-size="10" fill="#475569">Tamiz Molecular</text>
-                                    <line x1="150" y1="80" x2="110" y2="80" stroke="#000" stroke-width="1" />
-                                    <text x="105" y="83" font-size="10" fill="#000" text-anchor="end" font-weight="bold">Butilo (Barrera)</text>
-                                    <line x1="190" y1="180" x2="270" y2="180" stroke="#334155" stroke-width="1" />
-                                    <text x="275" y="183" font-size="10" fill="#334155">Sello Secundario</text>
-                                </svg>
-                            </div>
-                            <div class="text-sm space-y-4">
-                                <div class="border-l-4 border-gray-400 pl-3"><strong>1. Perfil y Tamiz:</strong> Absorbe la humedad inicial para evitar el empañado interno.</div>
-                                <div class="border-l-4 border-black pl-3"><strong>2. Sello Primario (Butilo):</strong> La barrera de vapor crítica. Debe ser continuo, sin cortes.</div>
-                                <div class="border-l-4 border-slate-600 pl-3"><strong>3. Sello Secundario:</strong> Aporta la estructura mecánica (Polisulfuro o Silicona Estructural).</div>
-                            </div>
-                        </div>
-                    </div>
-                </article>
+            <!-- Anatomía -->
+            <article class="mb-16 print-avoid-break">
+                <div class="flex items-center mb-6">
+                    <div class="bg-cyan-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold text-xl mr-3 shadow-md">2</div>
+                    <h2 class="text-3xl font-bold text-slate-800 border-b-2 border-slate-200 w-full pb-2">Anatomía del DVH</h2>
+                </div>
 
-                <!-- Legislación EXTENDIDA -->
-                <article class="print-avoid-break mb-12">
-                     <div class="flex items-center mb-6">
-                        <div class="bg-cyan-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold text-xl mr-3 shadow-md">3</div>
-                        <h3 class="text-3xl font-bold text-slate-800 border-b-2 border-slate-200 w-full pb-2">Marco Normativo Legal</h3>
-                    </div>
-                    <div class="grid md:grid-cols-2 gap-8">
-                        <!-- CABA -->
-                        <div class="bg-slate-50 p-6 rounded-lg border border-slate-200">
-                            <h4 class="font-bold text-slate-900 mb-2 border-b pb-2 flex items-center"><i class="fas fa-city mr-2 text-cyan-600"></i> CABA (Código de Edificación)</h4>
-                            <p class="text-sm text-gray-700 mb-3">Establece estándares obligatorios de eficiencia energética para todas las obras nuevas.</p>
-                            <ul class="text-sm text-gray-600 list-disc pl-4 space-y-2">
-                                <li><strong>Transmitancia Térmica (K):</strong> Se exigen valores máximos de K para techos y muros (incluyendo ventanas). El DVH es prácticamente obligatorio para cumplir.</li>
-                                <li><strong>Factor Solar:</strong> En fachadas con mucha exposición (Este/Oeste), se exige limitar la entrada de calor solar, obligando al uso de vidrios de control solar o Low-E.</li>
-                                <li><strong>Objetivo:</strong> Reducir la isla de calor urbana y el consumo eléctrico de aires acondicionados.</li>
-                            </ul>
+                <div class="bg-slate-50 border border-slate-200 rounded-xl p-8 mb-8 shadow-inner overflow-hidden">
+                    <h3 class="text-lg font-bold mb-6 text-cyan-900 border-b border-cyan-200 pb-2">Corte Transversal: Componentes Críticos</h3>
+                    <div class="flex flex-col md:flex-row gap-8 items-center justify-center">
+                        <div class="flex-shrink-0 max-w-full overflow-x-auto">
+                            <svg width="450" height="250" viewBox="0 0 380 220" class="max-w-full h-auto">
+                                <!-- Diagrama SVG Optimizado -->
+                                <rect x="150" y="20" width="80" height="150" fill="#e2e8f0" stroke="#64748b" />
+                                <circle cx="160" cy="30" r="2" fill="#94a3b8" /><circle cx="170" cy="35" r="2" fill="#94a3b8" />
+                                <circle cx="180" cy="25" r="2" fill="#94a3b8" /><circle cx="190" cy="30" r="2" fill="#94a3b8" />
+                                <circle cx="200" cy="40" r="2" fill="#94a3b8" /><circle cx="210" cy="25" r="2" fill="#94a3b8" />
+                                <circle cx="220" cy="35" r="2" fill="#94a3b8" />
+                                <rect x="130" y="10" width="20" height="170" fill="#bfdbfe" stroke="#3b82f6" opacity="0.8" />
+                                <rect x="230" y="10" width="20" height="170" fill="#bfdbfe" stroke="#3b82f6" opacity="0.8" />
+                                <rect x="150" y="20" width="3" height="150" fill="#000" />
+                                <rect x="227" y="20" width="3" height="150" fill="#000" />
+                                <path d="M150,170 L230,170 L230,190 L150,190 Z" fill="#334155" />
+                                <text x="125" y="100" font-size="10" fill="#0e7490" text-anchor="end">Vidrio Ext.</text>
+                                <text x="255" y="100" font-size="10" fill="#0e7490">Vidrio Int.</text>
+                                <line x1="190" y1="35" x2="270" y2="35" stroke="#64748b" stroke-width="1" />
+                                <text x="275" y="38" font-size="10" fill="#475569">Tamiz Molecular</text>
+                                <line x1="150" y1="80" x2="110" y2="80" stroke="#000" stroke-width="1" />
+                                <text x="105" y="83" font-size="10" fill="#000" text-anchor="end" font-weight="bold">Butilo (Barrera)</text>
+                                <line x1="190" y1="180" x2="270" y2="180" stroke="#334155" stroke-width="1" />
+                                <text x="275" y="183" font-size="10" fill="#334155">Sello Secundario</text>
+                            </svg>
                         </div>
+                        <div class="text-sm space-y-4">
+                             <div>
+                                <strong class="text-slate-900 block border-l-4 border-gray-400 pl-2">1. Perfil Separador y Tamiz Molecular:</strong>
+                                <p class="text-slate-600 pl-3 mt-1">Contiene sales higroscópicas que absorben la humedad atrapada. Vital para evitar el empañado interno.</p>
+                            </div>
+                            <div>
+                                <strong class="text-slate-900 block border-l-4 border-black pl-2">2. Sello Primario (Butilo):</strong>
+                                <p class="text-slate-600 pl-3 mt-1">Pasta negra que actúa como <strong>Barrera de Vapor</strong>. Impide el ingreso de humedad. Debe ser continuo.</p>
+                            </div>
+                            <div>
+                                <strong class="text-slate-900 block border-l-4 border-slate-600 pl-2">3. Sello Secundario:</strong>
+                                <p class="text-slate-600 pl-3 mt-1">Aporta la <strong>resistencia mecánica</strong> estructural. Generalmente Polisulfuro. En Piel de Vidrio expuesta al sol, debe ser Silicona Estructural.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Criterios de Elección -->
+            <article class="mb-16 print-avoid-break">
+                <div class="flex items-center mb-6">
+                    <div class="bg-cyan-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold text-xl mr-3 shadow-md">3</div>
+                    <h2 class="text-3xl font-bold text-slate-800 border-b-2 border-slate-200 w-full pb-2">Criterios de Elección</h2>
+                </div>
+                
+                <p class="mb-4">Al configurar un DVH, el orden de prioridades <strong>siempre</strong> debe ser el siguiente:</p>
+                <div class="grid md:grid-cols-4 gap-4 text-center mb-8">
+                    <div class="bg-red-50 p-6 rounded-lg border border-red-200 shadow-sm">
+                        <div class="text-red-600 text-3xl mb-3"><i class="fas fa-user-shield"></i></div>
+                        <h3 class="font-bold text-gray-800 uppercase text-sm">1. Seguridad</h3>
+                        <p class="text-xs text-gray-600 mt-2">Prioridad Absoluta</p>
+                    </div>
+                    <div class="bg-orange-50 p-6 rounded-lg border border-orange-200 shadow-sm">
+                        <div class="text-orange-600 text-3xl mb-3"><i class="fas fa-thermometer-half"></i></div>
+                        <h3 class="font-bold text-gray-800 uppercase text-sm">2. Térmica</h3>
+                        <p class="text-xs text-gray-600 mt-2">Eficiencia (Valor K)</p>
+                    </div>
+                    <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 shadow-sm">
+                        <div class="text-blue-600 text-3xl mb-3"><i class="fas fa-volume-mute"></i></div>
+                        <h3 class="font-bold text-gray-800 uppercase text-sm">3. Acústica</h3>
+                        <p class="text-xs text-gray-600 mt-2">Confort Sonoro</p>
+                    </div>
+                    <div class="bg-yellow-50 p-6 rounded-lg border border-yellow-200 shadow-sm">
+                        <div class="text-yellow-600 text-3xl mb-3"><i class="fas fa-sun"></i></div>
+                        <h3 class="font-bold text-gray-800 uppercase text-sm">4. Solar</h3>
+                        <p class="text-xs text-gray-600 mt-2">Control Radiación</p>
+                    </div>
+                </div>
+                <p class="text-xs text-gray-500 italic text-center">* El costo debe ser la última variable a considerar después de garantizar la seguridad y prestación técnica.</p>
+            </article>
+
+            <!-- Seguridad -->
+            <article class="mb-16 print-avoid-break">
+                <div class="flex items-center mb-6">
+                    <div class="bg-cyan-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold text-xl mr-3 shadow-md">4</div>
+                    <h2 class="text-3xl font-bold text-slate-800 border-b-2 border-slate-200 w-full pb-2">Tipos de Vidrio y Seguridad</h2>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-6 mb-8">
+                    <!-- Crudo -->
+                    <div class="bg-white rounded-xl shadow border-t-4 border-red-500 overflow-hidden flex flex-col p-6">
+                        <div class="flex items-center justify-center mb-4 text-red-600 text-4xl"><i class="fas fa-times-circle"></i></div>
+                        <h3 class="font-bold text-xl text-center mb-2">Vidrio Crudo (Float)</h3>
+                        <p class="text-sm text-gray-600 text-center mb-4">Rompe en trozos grandes y filosos (guillotinas).</p>
+                        <div class="mt-auto bg-red-100 text-red-800 text-xs font-bold px-2 py-1 rounded text-center uppercase">NO ES DE SEGURIDAD</div>
+                    </div>
+                    <!-- Laminado -->
+                    <div class="bg-white rounded-xl shadow border-t-4 border-green-500 overflow-hidden flex flex-col p-6">
+                        <div class="flex items-center justify-center mb-4 text-green-600 text-4xl"><i class="fas fa-shield-alt"></i></div>
+                        <h3 class="font-bold text-xl text-center mb-2">Laminado</h3>
+                        <p class="text-sm text-gray-600 text-center mb-4">Mantiene la <strong>Integridad</strong>. El plástico PVB retiene los trozos si se rompe.</p>
+                        <div class="mt-auto bg-green-100 text-green-800 text-xs font-bold px-2 py-1 rounded text-center uppercase">Techos / Barandas / Vacío</div>
+                    </div>
+                    <!-- Templado -->
+                    <div class="bg-white rounded-xl shadow border-t-4 border-blue-500 overflow-hidden flex flex-col p-6">
+                        <div class="flex items-center justify-center mb-4 text-blue-600 text-4xl"><i class="fas fa-hammer"></i></div>
+                        <h3 class="font-bold text-xl text-center mb-2">Templado</h3>
+                        <p class="text-sm text-gray-600 text-center mb-4">Aporta <strong>Resistencia Mecánica</strong>. Se rompe en pequeños granos sin filo, pero deja el hueco abierto.</p>
+                        <div class="mt-auto bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded text-center uppercase">Puertas / Duchas</div>
+                    </div>
+                </div>
+
+                <div class="bg-gray-100 p-6 rounded-lg border border-gray-300">
+                    <h4 class="font-bold text-gray-800 mb-4 border-b border-gray-300 pb-2">CRITERIO PARA FACHADAS (Piel de Vidrio)</h4>
+                    <p class="text-sm text-gray-700 mb-4 italic">"Si el vidrio se rompe, ¿a quién lastima?"</p>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between bg-white p-4 rounded shadow-sm border-l-4 border-cyan-500">
+                            <span class="font-bold text-gray-800">Vidrio Interior</span>
+                            <span class="text-xs font-bold bg-cyan-100 text-cyan-800 px-2 py-1 rounded">SIEMPRE LAMINADO</span>
+                        </div>
+                        <p class="text-xs text-gray-500 pl-4 mb-2">Protege a las personas dentro del edificio.</p>
                         
-                        <!-- Provincia de Buenos Aires -->
-                        <div class="bg-slate-50 p-6 rounded-lg border border-slate-200">
-                            <h4 class="font-bold text-slate-900 mb-2 border-b pb-2 flex items-center"><i class="fas fa-map-marked-alt mr-2 text-cyan-600"></i> Provincia Bs. As. (Ley 13.059)</h4>
-                            <p class="text-sm text-gray-700 mb-3">Conocida como la "Ley de Acondicionamiento Térmico".</p>
-                            <ul class="text-sm text-gray-600 list-disc pl-4 space-y-2">
-                                <li><strong>Alcance:</strong> Obligatoria para toda construcción pública o privada destinada a vivienda humana.</li>
-                                <li><strong>Normas IRAM:</strong> Exige el cumplimiento de las normas IRAM 11.601 (Aislamiento), 11.603 (Clasificación Bioambiental) y 11.605 (Condiciones de habitabilidad).</li>
-                                <li><strong>Etiquetado:</strong> Precursora del etiquetado de eficiencia energética en viviendas. Sin el cumplimiento de aislamiento (donde el vidrio es clave), no se debería otorgar el final de obra.</li>
-                            </ul>
+                        <div class="flex items-center justify-between bg-white p-4 rounded shadow-sm border-l-4 border-yellow-500">
+                            <span class="font-bold text-gray-800">Vidrio Exterior</span>
+                            <span class="text-xs font-bold text-right bg-yellow-100 text-yellow-800 px-2 py-1 rounded">TEMPLADO O LAMINADO</span>
                         </div>
+                        <p class="text-xs text-gray-500 pl-4">Si es crudo y se rompe, caen trozos a la calle. Si es Templado, cae "lluvia de vidrio". La tendencia es laminar también el exterior.</p>
+                    </div>
+                </div>
+            </article>
 
-                        <!-- Rosario -->
-                        <div class="bg-slate-50 p-6 rounded-lg border border-slate-200 md:col-span-2">
-                            <h4 class="font-bold text-slate-900 mb-2 border-b pb-2 flex items-center"><i class="fas fa-building mr-2 text-cyan-600"></i> Rosario (Ordenanza 8757)</h4>
-                            <div class="flex flex-col md:flex-row gap-4">
-                                <div class="md:w-1/2">
-                                    <p class="text-sm text-gray-700">Fue pionera en Argentina. Establece coeficientes de transmitancia térmica admisibles para la envolvente.</p>
-                                </div>
-                                <div class="md:w-1/2 bg-white p-3 rounded border text-xs text-gray-600">
-                                    <strong>Requisito Clave:</strong> Analiza el edificio globalmente. Si el porcentaje de vidrio en fachada es alto, la exigencia sobre la calidad del vidrio (Valor K) aumenta exponencialmente para compensar.
-                                </div>
+            <!-- Patologías -->
+            <article class="mb-16 print-avoid-break">
+                 <div class="flex items-center mb-6">
+                    <div class="bg-cyan-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold text-xl mr-3 shadow-md">5</div>
+                    <h2 class="text-3xl font-bold text-slate-800 border-b-2 border-slate-200 w-full pb-2">Patologías Comunes</h2>
+                </div>
+                <div class="space-y-6">
+                    <!-- Condensación Interna -->
+                    <div class="flex gap-4 p-4 rounded-lg bg-red-50 border border-red-100">
+                        <div class="w-12 h-12 flex-shrink-0 bg-red-100 rounded-full flex items-center justify-center text-red-600 text-xl shadow-sm">
+                            <i class="fas fa-tint-slash"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg text-slate-900">1. Condensación INTERNA (Cámara)</h3>
+                            <p class="text-sm text-gray-700 mb-1">El vidrio se empaña <strong>entre</strong> los dos vidrios. No se puede limpiar.</p>
+                            <div class="inline-block bg-red-200 text-red-900 text-xs px-2 py-0.5 rounded font-bold uppercase">Diagnóstico: Falla del DVH</div>
+                            <p class="text-xs text-gray-500 mt-1">Causa: Rotura del sello de butilo o saturación del tamiz molecular. Solución: Reemplazo total de la unidad.</p>
+                        </div>
+                    </div>
+
+                    <!-- Condensación Superficial -->
+                    <div class="flex gap-4 p-4 rounded-lg bg-blue-50 border border-blue-100">
+                        <div class="w-12 h-12 flex-shrink-0 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-xl shadow-sm">
+                            <i class="fas fa-water"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg text-slate-900">2. Condensación SUPERFICIAL (Habitación)</h3>
+                            <p class="text-sm text-gray-700 mb-1">El vidrio transpira del lado de adentro (se puede secar con un trapo).</p>
+                            <div class="inline-block bg-blue-200 text-blue-900 text-xs px-2 py-0.5 rounded font-bold uppercase">Diagnóstico: Fenómeno Físico</div>
+                            <p class="text-xs text-gray-500 mt-1">Causa: Alta humedad ambiente + Superficie del vidrio fría. Solución: Ventilar o mejorar la aislación térmica (Usar DVH con Low-E).</p>
+                        </div>
+                    </div>
+
+                    <!-- Estrés Térmico -->
+                    <div class="flex gap-4 p-4 rounded-lg bg-orange-50 border border-orange-100">
+                        <div class="w-12 h-12 flex-shrink-0 bg-orange-100 rounded-full flex items-center justify-center text-orange-600 text-xl shadow-sm">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg text-slate-900">3. Rotura por Estrés Térmico</h3>
+                            <p class="text-sm text-gray-700 mb-1">El vidrio se fisura espontáneamente, con una grieta que nace del borde y "viborea".</p>
+                            <div class="inline-block bg-orange-200 text-orange-900 text-xs px-2 py-0.5 rounded font-bold uppercase">Diagnóstico: Diseño Térmico</div>
+                            <p class="text-xs text-gray-500 mt-1">Causa: Diferencia de temperatura en la superficie (Sombra proyectada vs Sol directo). El vidrio se dilata de forma desigual. Solución: Usar Vidrio Templado o pulido de bordes perfecto.</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Normativas -->
+            <article class="print-avoid-break mb-12">
+                 <div class="flex items-center mb-6">
+                    <div class="bg-cyan-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold text-xl mr-3 shadow-md">6</div>
+                    <h2 class="text-3xl font-bold text-slate-800 border-b-2 border-slate-200 w-full pb-2">Calidad y Legislación</h2>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Control de Calidad -->
+                    <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
+                        <h3 class="font-bold text-gray-800 mb-4 uppercase tracking-wider text-sm border-b pb-2">Control de Fabricación</h3>
+                        <ul class="space-y-3 text-sm text-gray-700">
+                            <li class="flex items-start"><i class="fas fa-check-circle text-green-500 mr-2 mt-1"></i> <span><strong>Agua Desmineralizada:</strong> Obligatoria en el lavado. El agua común deja sales que manchan el vidrio por dentro con el tiempo.</span></li>
+                            <li class="flex items-start"><i class="fas fa-check-circle text-green-500 mr-2 mt-1"></i> <span><strong>Continuidad del Butilo:</strong> El sello negro primario no debe tener cortes ni burbujas.</span></li>
+                            <li class="flex items-start"><i class="fas fa-check-circle text-green-500 mr-2 mt-1"></i> <span><strong>Espesor del Sello Secundario:</strong> Vital para mantener los vidrios unidos bajo presión de viento.</span></li>
+                        </ul>
+                    </div>
+    
+                    <!-- Legislación -->
+                    <div class="bg-cyan-50 p-6 rounded-lg border border-cyan-100">
+                        <h3 class="font-bold text-cyan-900 mb-4 uppercase tracking-wider text-sm border-b border-cyan-200 pb-2">Legislación Vigente</h3>
+                        <div class="space-y-4 text-sm text-gray-700">
+                            <div>
+                                <span class="font-bold block text-cyan-800"><i class="fas fa-map-marker-alt mr-1"></i> CABA (Código de Edificación)</span>
+                                <p>Exige el uso obligatorio de DVH en obras nuevas. Establece valores máximos de <strong>Transmitancia Térmica (K)</strong> y <strong>Factor Solar</strong> para reducir el consumo energético de la ciudad.</p>
+                            </div>
+                            <div>
+                                <span class="font-bold block text-cyan-800"><i class="fas fa-map-marker-alt mr-1"></i> Buenos Aires (Ley 13.059)</span>
+                                <p>Ley de Acondicionamiento Térmico. Exige aislar la "piel" del edificio para reducir consumo de gas y electricidad.</p>
+                            </div>
+                            <div>
+                                <span class="font-bold block text-cyan-800"><i class="fas fa-map-marker-alt mr-1"></i> Rosario (Ordenanza 8857)</span>
+                                <p>Pionera en la exigencia de aislación térmica y control solar en cerramientos vidriados.</p>
                             </div>
                         </div>
                     </div>
-                </article>
-            </div>
-
-            <!-- CONTENIDO FLOAT -->
-            <div id="tab-float" class="tab-content px-2 md:px-8">
-                <h2 class="print-header">MANUAL TÉCNICO: PROCESO FLOAT</h2>
-                <article class="mb-12">
-                    <h3 class="text-2xl font-bold text-slate-800 border-b pb-2 mb-4">El Proceso de Fabricación</h3>
-                    <p class="text-lg text-gray-700 mb-4">El proceso Float consiste en hacer flotar una cinta continua de vidrio (a 1100°C) sobre un baño de estaño fundido.</p>
-                    <div class="bg-gray-900 text-white rounded-xl p-6 mb-6 shadow-lg overflow-x-auto">
-                         <svg width="700" height="150" viewBox="0 0 700 150" class="mx-auto">
-                            <rect x="10" y="40" width="60" height="70" rx="4" fill="#64748b" /><text x="40" y="80" font-size="10" fill="white" text-anchor="middle">MP</text>
-                            <rect x="100" y="40" width="120" height="70" rx="4" fill="#ef4444" /><text x="160" y="80" font-size="12" fill="white" text-anchor="middle" font-weight="bold">HORNO</text>
-                            <rect x="250" y="50" width="140" height="50" rx="4" fill="#3b82f6" /><text x="320" y="80" font-size="12" fill="white" text-anchor="middle" font-weight="bold">BAÑO ESTAÑO</text>
-                            <rect x="420" y="50" width="120" height="50" rx="4" fill="#f59e0b" /><text x="480" y="80" font-size="12" fill="white" text-anchor="middle" font-weight="bold">RECOCIDO</text>
-                            <rect x="570" y="40" width="10" height="70" fill="white" />
-                            <rect x="610" y="60" width="60" height="30" fill="#10b981" /><text x="640" y="80" font-size="10" fill="white" text-anchor="middle">STOCK</text>
-                            <line x1="70" y1="75" x2="100" y2="75" stroke="#94a3b8" stroke-width="2" />
-                            <line x1="220" y1="75" x2="250" y2="75" stroke="#94a3b8" stroke-width="2" />
-                            <line x1="390" y1="75" x2="420" y2="75" stroke="#94a3b8" stroke-width="2" />
-                            <line x1="540" y1="75" x2="570" y2="75" stroke="#94a3b8" stroke-width="2" />
-                         </svg>
-                    </div>
-                    <ul class="space-y-4 text-gray-700 list-disc pl-5">
-                        <li><strong>Materias Primas:</strong> Arena de sílice (base), Carbonato de sodio (fundente), Dolomita y <span class="text-cyan-600 font-bold">Cullet</span> (Vidrio reciclado para ahorrar energía).</li>
-                        <li><strong>Horno:</strong> Funde la mezcla a 1550°C.</li>
-                        <li><strong>Baño de Estaño (Tin Bath):</strong> El vidrio flota sobre estaño líquido. La gravedad alisa la superficie perfectamente (planimetría) sin necesidad de pulido.</li>
-                        <li><strong>Recocido (Lehr):</strong> Enfriamiento controlado para eliminar tensiones internas. Si se enfría rápido, estalla al cortar.</li>
-                    </ul>
-                </article>
-            </div>
+                </div>
+            </article>
         </div>
 
-        <!-- ================================================================================== -->
-        <!-- SECCIÓN 2: ACADEMIA (AMPLIADO Y MEJORADO) -->
-        <!-- ================================================================================== -->
-        <div id="section-academy" class="section-container">
+        <!-- ========================================== -->
+        <!-- PESTAÑA 2: PROCESO FLOAT (CONTENIDO COMPLETO) -->
+        <!-- ========================================== -->
+        <div id="tab-float" class="tab-content px-4 md:px-8">
             
-            <header class="bg-white rounded-2xl shadow overflow-hidden mb-8 border border-slate-200">
-                <div class="bg-gradient-to-r from-slate-800 to-slate-900 p-8 relative overflow-hidden">
-                    <div class="absolute top-0 left-0 w-64 h-64 bg-cyan-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob"></div>
-                    <div class="absolute top-0 right-0 w-64 h-64 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob animation-delay-2000"></div>
-                    <div class="relative z-10 flex flex-col md:flex-row items-center gap-6">
-                        <div class="bg-white/10 p-4 rounded-full backdrop-blur-sm"><i class="fas fa-microscope text-4xl text-cyan-300"></i></div>
-                        <div class="text-center md:text-left">
-                            <h1 class="text-3xl md:text-4xl font-bold text-white mb-1">HERRAMIENTAS DE CALIDAD</h1>
-                            <p class="text-cyan-200 text-lg font-light">Análisis de Causa, Control Estadístico y Capacidad de Proceso</p>
-                        </div>
+            <h2 class="section-print-title text-2xl font-bold page-break">SECCIÓN 2: PROCESO DE FABRICACIÓN</h2>
+
+            <!-- Intro -->
+            <article class="mb-12">
+                <div class="flex items-center mb-6">
+                    <div class="bg-cyan-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold text-xl mr-3 shadow-md">1</div>
+                    <h2 class="text-3xl font-bold text-slate-800 border-b-2 border-slate-200 w-full pb-2">Introducción al Float</h2>
+                </div>
+                <p class="text-lg text-gray-700 mb-6">
+                    El 90% del vidrio plano mundial se fabrica mediante el <strong>Proceso Float</strong>. Inventado en los años 50 (por Alastair Pilkington), revolucionó la industria al permitir obtener láminas de espesor uniforme y planimetría perfecta sin necesidad de pulido posterior.
+                </p>
+                <div class="bg-cyan-50 p-6 rounded-lg border border-cyan-100 flex items-start shadow-sm mb-6">
+                    <i class="fas fa-info-circle text-4xl text-cyan-600 mr-4 mt-1"></i>
+                    <div>
+                        <h4 class="font-bold text-cyan-900 uppercase text-sm mb-1">Capacidad Industrial</h4>
+                        <p class="text-sm text-cyan-800">Una línea Float moderna produce aproximadamente <strong>6000 toneladas de vidrio al año</strong>. Estas plantas operan 24 horas al día, 365 días al año, en campañas continuas de 15 a 20 años. Detener el horno significaría que el vidrio se solidifique dentro, arruinando la instalación.</p>
                     </div>
                 </div>
-                <div class="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center text-xs text-slate-500 font-bold uppercase tracking-wider">
-                    <span><i class="fas fa-book-reader mr-2"></i> Módulo de Capacitación</span>
-                    <span id="brandOwnerAcademy"><i class="fas fa-copyright mr-1"></i> Propiedad de Advantage Consulting</span>
-                </div>
-            </header>
+            </article>
 
-            <div class="flex overflow-x-auto space-x-1 mb-6 tab-nav-wrapper no-print bg-slate-200 p-1 rounded-t-lg">
-                <button onclick="switchTab('academy', 'analisis')" id="btn-analisis" class="tab-btn active flex-1 py-3 px-4 rounded-t-md font-bold text-sm flex items-center justify-center gap-2"><i class="fas fa-search"></i> 1. Las 7 Herramientas</button>
-                <button onclick="switchTab('academy', 'control')" id="btn-control" class="tab-btn flex-1 py-3 px-4 rounded-t-md font-bold text-sm flex items-center justify-center gap-2"><i class="fas fa-chart-line"></i> 2. Control (SPC)</button>
-                <button onclick="switchTab('academy', 'capacidad')" id="btn-capacidad" class="tab-btn flex-1 py-3 px-4 rounded-t-md font-bold text-sm flex items-center justify-center gap-2"><i class="fas fa-tachometer-alt"></i> 3. Masterclass Cp/Cpk</button>
-            </div>
+            <!-- Diagrama del Proceso Float -->
+            <div class="bg-gray-900 text-white rounded-xl p-6 mb-12 overflow-hidden shadow-lg print-avoid-break">
+                <h3 class="text-center font-bold text-cyan-400 mb-6 uppercase tracking-widest">Esquema de la Línea de Producción</h3>
+                <div class="overflow-x-auto">
+                    <svg width="700" height="180" viewBox="0 0 700 180" class="mx-auto">
+                        <defs>
+                            <marker id="arrow" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#475569" />
+                            </marker>
+                        </defs>
 
-            <!-- TAB 1: 7 HERRAMIENTAS (DETALLADO) -->
-            <div id="tab-analisis" class="tab-content active">
-                <h2 class="print-header">LAS 7 HERRAMIENTAS BÁSICAS DE CALIDAD</h2>
-                
-                <!-- 1. ISHIKAWA -->
-                <article class="concept-card">
-                    <div class="flex items-center gap-3 mb-4 border-b pb-2">
-                        <div class="bg-cyan-100 text-cyan-800 w-8 h-8 rounded-full flex items-center justify-center font-bold">1</div>
-                        <h3 class="text-lg font-bold text-slate-800">Diagrama de Ishikawa (Causa-Efecto)</h3>
-                    </div>
-                    <div class="flex flex-col md:flex-row gap-6">
-                        <div class="md:w-2/3 bg-slate-50 p-2 rounded border">
-                            <svg viewBox="0 0 600 250" class="w-full h-auto">
-                                <line x1="50" y1="125" x2="500" y2="125" stroke="#334155" stroke-width="3" marker-end="url(#arrow)" />
-                                <path d="M500,95 L560,125 L500,155 Z" fill="#ef4444" />
-                                <text x="505" y="130" font-size="10" fill="white" font-weight="bold">DEFECTO</text>
-                                <!-- Ramas 6M -->
-                                <line x1="150" y1="50" x2="180" y2="125" stroke="#94a3b8" stroke-width="2" /><text x="150" y="45" font-size="10" font-weight="bold">MÉTODO</text>
-                                <line x1="300" y1="50" x2="330" y2="125" stroke="#94a3b8" stroke-width="2" /><text x="300" y="45" font-size="10" font-weight="bold">MAQUINARIA</text>
-                                <line x1="150" y1="200" x2="180" y2="125" stroke="#94a3b8" stroke-width="2" /><text x="150" y="215" font-size="10" font-weight="bold">MANO OBRA</text>
-                                <line x1="300" y1="200" x2="330" y2="125" stroke="#94a3b8" stroke-width="2" /><text x="300" y="215" font-size="10" font-weight="bold">MATERIALES</text>
-                            </svg>
-                        </div>
-                        <div class="md:w-1/3 text-sm text-gray-600">
-                            <p class="mb-2"><strong>¿Qué es?</strong> Gráfico que organiza posibles causas de un problema en categorías (las 6M).</p>
-                            <p class="mb-2"><strong>¿Cuándo usar?</strong> En sesiones de lluvia de ideas (Brainstorming) cuando la causa raíz no es evidente.</p>
-                            <div class="info-box"><strong>Clave:</strong> No identifica la causa real por sí solo, ayuda a generar hipótesis para investigar.</div>
-                        </div>
-                    </div>
-                </article>
-
-                <!-- 2. PARETO -->
-                <article class="concept-card">
-                    <div class="flex items-center gap-3 mb-4 border-b pb-2">
-                        <div class="bg-cyan-100 text-cyan-800 w-8 h-8 rounded-full flex items-center justify-center font-bold">2</div>
-                        <h3 class="text-lg font-bold text-slate-800">Diagrama de Pareto (80/20)</h3>
-                    </div>
-                    <div class="flex flex-col md:flex-row gap-6">
-                        <div class="md:w-1/2">
-                            <p class="text-sm text-gray-600 mb-2">Basado en el principio de que el 80% de los problemas provienen del 20% de las causas (Pocos Vitales vs Muchos Triviales).</p>
-                            <ul class="text-sm list-disc pl-4 text-gray-600">
-                                <li>Ayuda a priorizar recursos.</li>
-                                <li>Se ataca primero la barra más alta.</li>
-                            </ul>
-                        </div>
-                        <div class="md:w-1/2 bg-white border p-2 rounded">
-                            <svg viewBox="0 0 300 150" class="w-full h-auto">
-                                <rect x="30" y="30" width="30" height="100" fill="#3b82f6" />
-                                <rect x="70" y="60" width="30" height="70" fill="#3b82f6" />
-                                <rect x="110" y="100" width="30" height="30" fill="#93c5fd" />
-                                <rect x="150" y="120" width="30" height="10" fill="#93c5fd" />
-                                <polyline points="45,30 85,50 125,110 165,125" fill="none" stroke="#ef4444" stroke-width="2" />
-                            </svg>
-                        </div>
-                    </div>
-                </article>
-
-                <!-- 3. CHECK SHEET -->
-                <article class="concept-card">
-                    <div class="flex items-center gap-3 mb-4 border-b pb-2">
-                        <div class="bg-cyan-100 text-cyan-800 w-8 h-8 rounded-full flex items-center justify-center font-bold">3</div>
-                        <h3 class="text-lg font-bold text-slate-800">Hoja de Verificación (Check Sheet)</h3>
-                    </div>
-                    <p class="text-sm text-gray-600 mb-4">Formulario diseñado para recopilar datos de manera sistemática y uniforme en el lugar donde ocurren los hechos.</p>
-                    <table class="tech-table text-center">
-                        <thead><tr><th>Defecto</th><th>Conteo</th><th>Total</th></tr></thead>
-                        <tbody>
-                            <tr><td>Rayas</td><td>IIII</td><td>4</td></tr>
-                            <tr><td>Manchas</td><td>IIII II</td><td>7</td></tr>
-                            <tr><td>Rotura</td><td>I</td><td>1</td></tr>
-                        </tbody>
-                    </table>
-                </article>
-
-                <div class="grid md:grid-cols-2 gap-6">
-                    <article class="concept-card">
-                        <div class="flex items-center gap-3 mb-2">
-                            <div class="bg-cyan-100 text-cyan-800 w-8 h-8 rounded-full flex items-center justify-center font-bold">4</div>
-                            <h3 class="font-bold">Histograma</h3>
-                        </div>
-                        <p class="text-xs text-gray-600">Muestra la distribución de frecuencia. Permite ver si el proceso está centrado o disperso.</p>
-                    </article>
-                    <article class="concept-card">
-                        <div class="flex items-center gap-3 mb-2">
-                            <div class="bg-cyan-100 text-cyan-800 w-8 h-8 rounded-full flex items-center justify-center font-bold">5</div>
-                            <h3 class="font-bold">Dispersión</h3>
-                        </div>
-                        <p class="text-xs text-gray-600">Analiza la relación entre dos variables (ej: Temperatura vs Dureza). ¿Si sube X, sube Y?</p>
-                    </article>
-                    <article class="concept-card">
-                        <div class="flex items-center gap-3 mb-2">
-                            <div class="bg-cyan-100 text-cyan-800 w-8 h-8 rounded-full flex items-center justify-center font-bold">6</div>
-                            <h3 class="font-bold">Estratificación</h3>
-                        </div>
-                        <p class="text-xs text-gray-600">Separa los datos por categorías (Turno Mañana vs Tarde) para hallar patrones ocultos.</p>
-                    </article>
-                    <article class="concept-card">
-                        <div class="flex items-center gap-3 mb-2">
-                            <div class="bg-cyan-100 text-cyan-800 w-8 h-8 rounded-full flex items-center justify-center font-bold">7</div>
-                            <h3 class="font-bold">Gráfico de Control</h3>
-                        </div>
-                        <p class="text-xs text-gray-600">Monitorea la estabilidad del proceso en el tiempo (Ver siguiente pestaña).</p>
-                    </article>
-                </div>
-            </div>
-
-            <!-- TAB 2: CONTROL SPC -->
-            <div id="tab-control" class="tab-content">
-                <h2 class="print-header">CONTROL ESTADÍSTICO DE PROCESO (SPC)</h2>
-                <article class="concept-card mb-8">
-                    <h3 class="text-xl font-bold text-slate-800 mb-4">El Gráfico de Control</h3>
-                    <div class="bg-white border rounded p-4 shadow-sm mb-4">
-                        <svg viewBox="0 0 500 200" class="w-full h-auto">
-                            <line x1="20" y1="30" x2="480" y2="30" stroke="#ef4444" stroke-width="2" stroke-dasharray="4" /> <text x="485" y="35" font-size="10" fill="red" font-weight="bold">UCL (+3σ)</text>
-                            <line x1="20" y1="100" x2="480" y2="100" stroke="#10b981" stroke-width="2" /> <text x="485" y="105" font-size="10" fill="green" font-weight="bold">Media</text>
-                            <line x1="20" y1="170" x2="480" y2="170" stroke="#ef4444" stroke-width="2" stroke-dasharray="4" /> <text x="485" y="175" font-size="10" fill="red" font-weight="bold">LCL (-3σ)</text>
-                            
-                            <polyline points="40,90 80,110 120,80 160,120 200,95 240,60 280,100 320,110 360,90 400,95" fill="none" stroke="#3b82f6" stroke-width="2" />
-                            <circle cx="40" cy="90" r="3" fill="blue" /><circle cx="240" cy="60" r="3" fill="blue" /><circle cx="400" cy="95" r="3" fill="blue" />
-                        </svg>
-                    </div>
-                    <div class="grid md:grid-cols-2 gap-6 text-sm text-gray-700">
-                        <div>
-                            <h4 class="font-bold text-slate-900">Conceptos Clave:</h4>
-                            <ul class="list-disc pl-4 space-y-1">
-                                <li><strong>Límites de Control (UCL/LCL):</strong> Se calculan con datos del proceso (+/- 3 Sigma). No son los límites del cliente.</li>
-                                <li><strong>Causa Común:</strong> Variación natural (ruido). Puntos dentro de límites. No tocar el proceso.</li>
-                                <li><strong>Causa Especial:</strong> Algo raro pasó (Punto fuera de límite). ¡Investigar ya!</li>
-                            </ul>
-                        </div>
-                        <div class="bg-yellow-50 p-3 rounded border border-yellow-200">
-                            <strong>Regla de Oro:</strong> Si ajustas un proceso que solo tiene variación común, aumentas la variabilidad (Sobrecontrol). Solo actúa ante causas especiales.
-                        </div>
-                    </div>
-                </article>
-            </div>
-
-            <!-- TAB 3: MASTERCLASS CPK (EXPANDIDO) -->
-            <div id="tab-capacidad" class="tab-content">
-                <h2 class="print-header">MASTERCLASS: CAPACIDAD DE PROCESO (Cp & Cpk)</h2>
-                
-                <article class="concept-card mb-8">
-                    <div class="flex justify-between items-center mb-6">
-                        <h3 class="text-xl font-bold text-slate-800">Concepto Visual</h3>
-                        <div class="bg-slate-100 px-3 py-1 rounded text-xs font-bold text-slate-600">La Voz del Cliente vs La Voz del Proceso</div>
-                    </div>
-                    
-                    <!-- SVG Visualización Coche en Garaje -->
-                    <div class="bg-white border rounded p-6 flex flex-col items-center mb-6">
-                         <svg viewBox="0 0 600 250" class="w-full h-auto">
-                            <!-- Garaje (Cliente) -->
-                            <line x1="50" y1="220" x2="550" y2="220" stroke="#333" />
-                            <rect x="100" y="50" width="10" height="170" fill="#ef4444" opacity="0.5" /> <text x="105" y="40" font-size="12" fill="red" text-anchor="middle" font-weight="bold">LSL</text>
-                            <rect x="490" y="50" width="10" height="170" fill="#ef4444" opacity="0.5" /> <text x="495" y="40" font-size="12" fill="red" text-anchor="middle" font-weight="bold">USL</text>
-                            
-                            <!-- Coche (Proceso) -->
-                            <path d="M150,220 C180,220 200,80 300,80 C400,80 420,220 450,220" fill="rgba(59, 130, 246, 0.2)" stroke="#3b82f6" stroke-width="3" />
-                            <line x1="300" y1="220" x2="300" y2="80" stroke="#3b82f6" stroke-dasharray="4" />
-                            <text x="300" y="240" font-size="12" fill="#3b82f6" text-anchor="middle">Dispersión del Proceso (6σ)</text>
-                        </svg>
-                    </div>
-
-                    <div class="grid md:grid-cols-2 gap-8">
-                        <!-- Cp -->
-                        <div class="bg-blue-50 p-4 rounded border-l-4 border-blue-500">
-                            <h4 class="font-bold text-blue-900 text-lg mb-2">Cp (Capacidad Potencial)</h4>
-                            <p class="text-sm text-blue-800 mb-3 font-mono bg-white p-2 rounded text-center border">Cp = (USL - LSL) / 6σ</p>
-                            <p class="text-sm text-gray-700"><strong>¿Cabe mi coche en el garaje?</strong><br>Mide si el ancho de tu proceso es lo suficientemente angosto para entrar en los límites del cliente. <br><em>Ignora si estás centrado o no.</em></p>
-                        </div>
+                        <!-- 1. Silos -->
+                        <rect x="10" y="50" width="50" height="80" rx="5" fill="#64748b" />
+                        <text x="35" y="145" font-size="10" fill="white" text-anchor="middle">MP</text>
                         
-                        <!-- Cpk -->
-                        <div class="bg-green-50 p-4 rounded border-l-4 border-green-500">
-                            <h4 class="font-bold text-green-900 text-lg mb-2">Cpk (Capacidad Real)</h4>
-                            <p class="text-sm text-green-800 mb-3 font-mono bg-white p-2 rounded text-center border">Cpk = min(Media - LSL, USL - Media) / 3σ</p>
-                            <p class="text-sm text-gray-700"><strong>¿Estacioné bien el coche?</strong><br>Considera el centrado. Es el valor real de tu desempeño. <br><em>Si Cpk < Cp, significa que tu proceso está descentrado.</em></p>
+                        <!-- 2. Horno -->
+                        <rect x="100" y="50" width="100" height="80" rx="5" fill="#ef4444" />
+                        <text x="150" y="90" font-size="12" font-weight="bold" fill="white" text-anchor="middle">HORNO</text>
+                        <text x="150" y="105" font-size="10" fill="#fca5a5" text-anchor="middle">1550°C</text>
+                        
+                        <!-- 3. Baño de Estaño (Tin Bath) -->
+                        <rect x="240" y="60" width="120" height="60" rx="5" fill="#3b82f6" />
+                        <text x="300" y="90" font-size="12" font-weight="bold" fill="white" text-anchor="middle">FLOAT (ESTAÑO)</text>
+                        <text x="300" y="105" font-size="10" fill="#bfdbfe" text-anchor="middle">Planimetría</text>
+                        
+                        <!-- 4. Recocido (Lehr) -->
+                        <rect x="400" y="60" width="100" height="60" rx="5" fill="#f59e0b" />
+                        <text x="450" y="90" font-size="12" font-weight="bold" fill="white" text-anchor="middle">RECOCIDO</text>
+                        <text x="450" y="105" font-size="10" fill="#fde68a" text-anchor="middle">Enfriamiento</text>
+                        
+                        <!-- 5. Corte -->
+                        <rect x="540" y="50" width="10" height="80" fill="#fff" />
+                        <text x="545" y="145" font-size="10" fill="white" text-anchor="middle">Corte</text>
+                        
+                        <!-- 6. Stacking -->
+                        <rect x="590" y="70" width="60" height="40" fill="#10b981" />
+                        <text x="620" y="95" font-size="10" fill="white" text-anchor="middle">STOCK</text>
+
+                        <!-- Conectores -->
+                        <line x1="60" y1="90" x2="90" y2="90" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)" />
+                        <line x1="200" y1="90" x2="230" y2="90" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)" />
+                        <line x1="360" y1="90" x2="390" y2="90" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)" />
+                        <line x1="500" y1="90" x2="530" y2="90" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)" />
+                        <line x1="550" y1="90" x2="580" y2="90" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)" />
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Detalle Paso a Paso -->
+            <article class="mb-16 print-avoid-break">
+                 <div class="flex items-center mb-6">
+                    <div class="bg-cyan-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold text-xl mr-3 shadow-md">2</div>
+                    <h2 class="text-3xl font-bold text-slate-800 border-b-2 border-slate-200 w-full pb-2">Etapas de Producción</h2>
+                </div>
+
+                <div class="space-y-8">
+                    <!-- Paso 1 -->
+                    <div class="flex flex-col md:flex-row gap-4">
+                        <div class="flex-shrink-0 w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center font-bold text-2xl text-gray-600">1</div>
+                        <div>
+                            <h4 class="font-bold text-xl text-gray-800 mb-2">Materias Primas (El Batch)</h4>
+                            <p class="text-gray-700">Todo comienza con la mezcla de ingredientes básicos:</p>
+                            <ul class="list-disc list-inside text-gray-600 mt-2 ml-4">
+                                <li><strong>Arena de Sílice:</strong> El vitrificante principal.</li>
+                                <li><strong>Carbonato de Sodio y Sulfato:</strong> Fundentes para bajar la temperatura de fusión.</li>
+                                <li><strong>Dolomita y Caliza:</strong> Estabilizantes.</li>
+                                <li><strong class="text-cyan-600">Cullet (Vidrio Reciclado):</strong> Se añade vidrio triturado para acelerar la fusión y reducir drásticamente el consumo energético y las emisiones de CO2.</li>
+                            </ul>
                         </div>
                     </div>
-                </article>
 
-                <article class="concept-card mb-8">
-                    <h3 class="text-xl font-bold text-slate-800 mb-4">Tabla de Interpretación (Semáforo)</h3>
-                    <div class="overflow-x-auto rounded border border-slate-200 shadow-sm">
-                        <table class="tech-table text-center">
-                            <thead>
-                                <tr>
-                                    <th>Valor Cpk</th>
-                                    <th>Interpretación</th>
-                                    <th>Nivel Sigma</th>
-                                    <th>Defectos (PPM)</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="bg-red-50 text-red-900 font-bold">
-                                    <td>&lt; 1.00</td>
-                                    <td>INCAPAZ (Genera basura)</td>
-                                    <td>&lt; 3σ</td>
-                                    <td>&gt; 66,807</td>
-                                </tr>
-                                <tr class="bg-yellow-50 text-yellow-900">
-                                    <td>1.00 - 1.33</td>
-                                    <td>Marginal (Peligroso)</td>
-                                    <td>3σ - 4σ</td>
-                                    <td>6,210</td>
-                                </tr>
-                                <tr class="bg-green-50 text-green-900 font-bold">
-                                    <td>&gt; 1.33</td>
-                                    <td>CAPAZ (Estándar Industrial)</td>
-                                    <td>4σ</td>
-                                    <td>63</td>
-                                </tr>
-                                <tr class="bg-cyan-50 text-cyan-900 font-bold">
-                                    <td>&gt; 2.00</td>
-                                    <td>CLASE MUNDIAL (Six Sigma)</td>
-                                    <td>6σ</td>
-                                    <td>0.002</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <!-- Paso 2 -->
+                    <div class="flex flex-col md:flex-row gap-4">
+                        <div class="flex-shrink-0 w-16 h-16 bg-red-100 rounded-full flex items-center justify-center font-bold text-2xl text-red-600">2</div>
+                        <div>
+                            <h4 class="font-bold text-xl text-gray-800 mb-2">Fusión (Melting)</h4>
+                            <p class="text-gray-700">La mezcla entra al horno y se funde a <strong>1550°C</strong>. En esta etapa ocurre el proceso de "afinado" (fining), donde se eliminan las burbujas de aire para garantizar una transparencia perfecta.</p>
+                        </div>
                     </div>
-                </article>
-            </div>
+
+                    <!-- Paso 3 -->
+                    <div class="flex flex-col md:flex-row gap-4">
+                        <div class="flex-shrink-0 w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center font-bold text-2xl text-blue-600">3</div>
+                        <div>
+                            <h4 class="font-bold text-xl text-gray-800 mb-2">Baño de Estaño (The Float Bath)</h4>
+                            <p class="text-gray-700">El corazón del proceso. El vidrio líquido sale del horno y se vierte sobre una piscina de <strong>estaño fundido</strong>. </p>
+                            <p class="text-gray-700 mt-2">Como el vidrio es más liviano que el estaño y no se mezclan (como aceite y agua), el vidrio flota y se esparce naturalmente por gravedad. Esto produce una cinta de vidrio con una <strong>planimetría perfecta</strong> (caras perfectamente paralelas) sin necesidad de pulido mecánico. La temperatura baja gradualmente de 1100°C a 600°C.</p>
+                        </div>
+                    </div>
+
+                    <!-- Paso 4 -->
+                    <div class="flex flex-col md:flex-row gap-4">
+                        <div class="flex-shrink-0 w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center font-bold text-2xl text-orange-600">4</div>
+                        <div>
+                            <h4 class="font-bold text-xl text-gray-800 mb-2">Recocido (Annealing Lehr)</h4>
+                            <p class="text-gray-700">Si el vidrio se enfriara rápido, estallaría. Por eso pasa por un túnel de recocido donde se enfría de forma muy lenta y controlada (de 600°C a temperatura ambiente) para eliminar las tensiones internas. Esto es vital para que el vidrio pueda ser cortado y procesado después.</p>
+                        </div>
+                    </div>
+
+                    <!-- Paso 5 -->
+                    <div class="flex flex-col md:flex-row gap-4">
+                        <div class="flex-shrink-0 w-16 h-16 bg-green-100 rounded-full flex items-center justify-center font-bold text-2xl text-green-600">5</div>
+                        <div>
+                            <h4 class="font-bold text-xl text-gray-800 mb-2">Inspección, Corte y Stock</h4>
+                            <p class="text-gray-700">Escáneres láser de alta velocidad inspeccionan la cinta continua buscando defectos ópticos. Luego, el vidrio se corta transversal y longitudinalmente con ruedas de diamante. Unos brazos robóticos apilan las hojas (generalmente en medida "Jumbo" de 3.60m x 2.50m o mayores) para su distribución.</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
         </div>
 
     </main>
     
-    <!-- FOOTER GLOBAL -->
-    <footer class="bg-slate-900 text-slate-400 text-xs py-8 text-center no-print mt-auto">
-        <p class="mb-2 font-bold text-white tracking-widest uppercase">Plataforma de Conocimiento Interno</p>
+    <footer class="text-center text-gray-400 text-xs py-8 no-print">
         <p id="footerCopy">© 2025 Propiedad intelectual de Advantage Consulting. Todos los derechos reservados.</p>
     </footer>
 
     <script>
-        // --- GESTIÓN DE SECCIONES PRINCIPALES ---
-        function switchSection(sectionId) {
-            document.querySelectorAll('.section-container').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-pill').forEach(el => el.classList.remove('active'));
-            document.getElementById('section-' + sectionId).classList.add('active');
-            document.getElementById('nav-' + sectionId).classList.add('active');
-        }
+        // LOGICA DE PESTAÑAS
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
 
-        // --- GESTIÓN DE PESTAÑAS INTERNAS ---
-        function switchTab(context, tabId) {
-            const container = document.getElementById('section-' + context);
-            container.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            container.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
             document.getElementById('tab-' + tabId).classList.add('active');
             document.getElementById('btn-' + tabId).classList.add('active');
         }
 
-        // --- GESTIÓN DE MARCA ---
-        function changeBrand() {
-            const selector = document.getElementById('brandSelect');
-            const footerCopy = document.getElementById('footerCopy');
-            const logoManuals = document.getElementById('logo-manuals');
-            const brandOwnerManuals = document.getElementById('brandOwnerManuals');
-            const brandOwnerAcademy = document.getElementById('brandOwnerAcademy');
-            
-            const isAdvantage = selector.value === 'advantage';
-            const text = isAdvantage ? 'Propiedad de Advantage Consulting' : 'Propiedad de Herramaq';
-            const copy = isAdvantage ? '© 2025 Propiedad intelectual de Advantage Consulting. Todos los derechos reservados.' : '© 2025 Propiedad intelectual de Herramaq. Todos los derechos reservados.';
-
-            if (logoManuals) logoManuals.src = isAdvantage ? 'IMG_4612.JPG' : 'Logo.png';
-            footerCopy.innerText = copy;
-            if (brandOwnerManuals) brandOwnerManuals.innerHTML = `<i class="fas fa-copyright mr-1"></i> ${text}`;
-            if (brandOwnerAcademy) brandOwnerAcademy.innerHTML = `<i class="fas fa-copyright mr-1"></i> ${text}`;
-        }
-
-        // --- IMPRESIÓN ---
-        function printCurrentContext(mode) {
+        // LOGICA DE IMPRESIÓN INTELIGENTE
+        function printManual(mode) {
+            // mode = 'all' o 'current'
             document.body.classList.remove('print-all', 'print-current');
-            if (mode === 'all') { document.body.classList.add('print-all'); } 
-            else { document.body.classList.add('print-current'); }
+            
+            if (mode === 'all') {
+                document.body.classList.add('print-all');
+            } else {
+                document.body.classList.add('print-current');
+            }
+            
             window.print();
         }
+
+        // LOGICA DE CAMBIO DE MARCA
+        function changeBrand() {
+            const selector = document.getElementById('brandSelect');
+            const logo = document.getElementById('brandLogo');
+            const ownerText = document.getElementById('brandOwner');
+            const footerCopy = document.getElementById('footerCopy');
+            
+            if (selector.value === 'advantage') {
+                // Config Advantage
+                logo.src = 'IMG_4612.JPG';
+                ownerText.innerText = 'Propiedad de Advantage Consulting';
+                footerCopy.innerText = '© 2025 Propiedad intelectual de Advantage Consulting. Todos los derechos reservados.';
+            } else {
+                // Config Herramaq
+                logo.src = 'Logo.png';
+                ownerText.innerText = 'Propiedad de Herramaq';
+                footerCopy.innerText = '© 2025 Propiedad intelectual de Herramaq. Todos los derechos reservados.';
+            }
+        }
     </script>
+
 </body>
 </html>
